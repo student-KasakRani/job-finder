@@ -1,10 +1,10 @@
-// 1️⃣ Express & Mongoose Import
+//  Express & Mongoose Import
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
-// 2️⃣ Mongoose Connection (Paste Your Connection String Here)
+//  Mongoose Connection 
 mongoose.connect('mongodb+srv://kasak:kasak1143@completecoding.mfpmgr8.mongodb.net/job-finder?retryWrites=true&w=majority&appName=CompleteCoding', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -15,12 +15,12 @@ mongoose.connect('mongodb+srv://kasak:kasak1143@completecoding.mfpmgr8.mongodb.n
 });
 
 
-// 3️⃣ EJS Setup & Static Files
+//  EJS Setup & Static Files
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-// 4️⃣ Job Schema & Model
+//  Job Schema & Model
 const jobSchema = new mongoose.Schema({
     title: String,
     company: String,
@@ -28,20 +28,20 @@ const jobSchema = new mongoose.Schema({
 });
 const Job = mongoose.model('Job', jobSchema);
 
-// 5️⃣ Home Route - Fetching Jobs from MongoDB
+//  Home Route - Fetching Jobs from MongoDB
 app.get('/', async (req, res) => {
     const jobs = await Job.find();
     res.render('home', { jobs });
 });
 
-// 🔥 6️⃣ Add Job Route (POST)
+//  Add Job Route (POST)
 app.post('/add', async (req, res) => {
     const { title, company, location } = req.body;
     await Job.create({ title, company, location });
     res.redirect('/');
 });
 
-// 🔥 7️⃣ Delete Job Route (POST)
+//  Delete Job Route (POST)
 app.post('/delete', async (req, res) => {
     const jobId = req.body.id;
     await Job.findByIdAndDelete(jobId);
@@ -73,12 +73,12 @@ app.post('/apply/:id', (req, res) => {
     res.send('Application Submitted Successfully!');
 });
 
-// 404 Page Route - Yeh sabse last me hamesha likhna
+// 404 Page Route 
 app.use((req, res) => {
     res.status(404).render('404');
 });
 
-// 6️⃣ Server Listen
+// Server Listen
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
